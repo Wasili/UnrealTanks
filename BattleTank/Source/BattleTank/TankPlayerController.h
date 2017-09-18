@@ -29,5 +29,5 @@ private:
 	UPROPERTY(EditAnywhere)
 		float crosshairYLocation = 0.33333f;
 	UPROPERTY(EditAnywhere)
-		float lineTraceRange = 10000000.0f;
+		float lineTraceRange = 1000000.0f;
 };
