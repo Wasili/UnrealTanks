@@ -8,7 +8,6 @@ void UTankBarrel::Elevate(float relativeSpeed) {
 	float elevationChange = relativeSpeed * maxDegreesPerSecond * GetWorld()->DeltaTimeSeconds;
 	float rawNewElevation = RelativeRotation.Pitch + elevationChange;
 
-	UE_LOG(LogTemp, Warning, TEXT("pitch %f"), relativeSpeed);
 	rawNewElevation = FMath::Clamp<float>(rawNewElevation, minimumElevation, maximumElevation);
 
 	SetRelativeRotation(FRotator(rawNewElevation, 0, 0));

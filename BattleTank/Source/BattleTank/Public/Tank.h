@@ -9,10 +9,10 @@
 class UTankBarrel;
 class UTankTurret;
 class UTankAimingComponent;
+class AProjectile;
 
 UCLASS()
-class BATTLETANK_API ATank : public APawn
-{
+class BATTLETANK_API ATank : public APawn {
 	GENERATED_BODY()
 
 public:
@@ -23,16 +23,27 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	void AimAtLocation(FVector aimLocation);
 
+	UFUNCTION(BlueprintCallable, Category = Firing)
+		void Fire();
+
+protected:
+	UTankAimingComponent* aimingComponent;
+
 	UFUNCTION(BlueprintCallable, Category = Setup)
 		void SetAimingComponentBarrel(UTankBarrel* barrel);
 	UFUNCTION(BlueprintCallable, Category = Setup)
 		void SetAimingComponentTurret(UTankTurret* turret);
 
-protected:
-	UTankAimingComponent* aimingComponent;
-
 private:
 	UPROPERTY(EditAnywhere, Category = Firing)
 		float launchSpeed = 100000.0f;
-		
+	UPROPERTY(EditAnywhere, Category = Setup)
+		TSubclassOf<AProjectile> projectileBlueprint;
+
+	UTankBarrel* barrelComponent = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+		float reloadTimeInSeconds = 3.0f;
+	float lastFireTime = 0.0f;
+
 };

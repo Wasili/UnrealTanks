@@ -3,7 +3,9 @@
 #include "Tank.h"
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
+#include "Projectile.h"
 #include "TankTurret.h"
+#include "Engine/World.h"
 
 // Sets default values
 ATank::ATank() {
@@ -29,7 +31,22 @@ void ATank::AimAtLocation(FVector aimLocation) {
 	aimingComponent->AimAtLocation(aimLocation, launchSpeed);
 }
 
+void ATank::Fire() {
+	bool isReloaded = (GetWorld()->GetTimeSeconds() - lastFireTime) > reloadTimeInSeconds;
+
+	if (barrelComponent && isReloaded) {
+
+		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(projectileBlueprint,
+			barrelComponent->GetSocketLocation(FName("LaunchPoint")),
+			barrelComponent->GetSocketRotation(FName("LaunchPoint"))
+			);
+		projectile->LaunchProjectile(launchSpeed);
+		lastFireTime = GetWorld()->GetTimeSeconds();
+	}
+}
+
 void ATank::SetAimingComponentBarrel(UTankBarrel* barrel) {
+	barrelComponent = barrel;
 	aimingComponent->SetBarrelComponent(barrel);
 }
 
